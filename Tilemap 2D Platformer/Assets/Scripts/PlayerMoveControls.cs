@@ -22,6 +22,8 @@ public class PlayerMoveControls : MonoBehaviour
 
     public Transform leftPoint;
 
+    public Transform rightPoint;
+
     private bool grounded = true;
 
     private void Start()
@@ -70,7 +72,14 @@ public class PlayerMoveControls : MonoBehaviour
                 rayLength,
                 groundLayer);
 
-        if (leftCheckHit)
+        RaycastHit2D rightCheckHit =
+            Physics2D
+                .Raycast(rightPoint.position,
+                Vector2.down,
+                rayLength,
+                groundLayer);
+
+        if (leftCheckHit || rightCheckHit)
         {
             grounded = true;
         }
@@ -79,13 +88,14 @@ public class PlayerMoveControls : MonoBehaviour
             grounded = false;
         }
 
-        SeeRays (leftCheckHit);
+        SeeRays (leftCheckHit, leftPoint);
+        SeeRays (rightCheckHit, rightPoint);
     }
 
-    public void SeeRays(RaycastHit2D leftCheckHit)
+    public void SeeRays(RaycastHit2D leftCheckHit, Transform point)
     {
         Color color1 = leftCheckHit ? Color.red : Color.green;
-        Debug.DrawRay(leftPoint.position, Vector2.down * rayLength, color1);
+        Debug.DrawRay(point.position, Vector2.down * rayLength, color1);
     }
 
     private void Flip()
