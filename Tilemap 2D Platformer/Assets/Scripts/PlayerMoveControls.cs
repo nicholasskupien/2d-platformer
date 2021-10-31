@@ -16,6 +16,8 @@ public class PlayerMoveControls : MonoBehaviour
 
     private int direction = 1;
 
+    public int initialNumJumps = 2; 
+
     public float rayLength;
 
     public LayerMask groundLayer;
@@ -26,11 +28,15 @@ public class PlayerMoveControls : MonoBehaviour
 
     private bool grounded = true;
 
+    private int numJumps;
+
     private void Start()
     {
         gI = GetComponent<GatherInput>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        numJumps = initialNumJumps;
     }
 
     void Update()
@@ -55,12 +61,17 @@ public class PlayerMoveControls : MonoBehaviour
     {
         if (gI.jumpInput)
         {
-            if (grounded)
+            if (grounded||numJumps>0)
             {
-                rb.velocity = new Vector2(gI.valueX * speed, jumpForce);
+                Jump();
+                numJumps --;
             }
         }
         gI.jumpInput = false;
+    }
+
+    private void Jump(){
+                rb.velocity = new Vector2(gI.valueX * speed, jumpForce);
     }
 
     private void CheckStatus()
@@ -82,6 +93,7 @@ public class PlayerMoveControls : MonoBehaviour
         if (leftCheckHit || rightCheckHit)
         {
             grounded = true;
+            numJumps = initialNumJumps;
         }
         else
         {
@@ -92,10 +104,10 @@ public class PlayerMoveControls : MonoBehaviour
         SeeRays (rightCheckHit, rightPoint);
     }
 
-    public void SeeRays(RaycastHit2D leftCheckHit, Transform point)
+    public void SeeRays(RaycastHit2D raycast, Transform point)
     {
-        Color color1 = leftCheckHit ? Color.red : Color.green;
-        Debug.DrawRay(point.position, Vector2.down * rayLength, color1);
+        Color color = raycast ? Color.red : Color.green;
+        Debug.DrawRay(point.position, Vector2.down * rayLength, color);
     }
 
     private void Flip()
@@ -110,5 +122,7 @@ public class PlayerMoveControls : MonoBehaviour
     private void SetAnimatorValues()
     {
         anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+        anim.SetFloat("Vertical Speed", rb.velocity.y);
+        anim.SetBool("Grounded", grounded);
     }
 }

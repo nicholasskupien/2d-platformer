@@ -13,8 +13,8 @@ TagManager:
   - UI
   - Player
   - Ground
-  - 
-  - 
+  - Ignore
+  - Objects
   - 
   - 
   - 
@@ -38,14 +38,14 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: BackGround
     uniqueID: 3312850237
     locked: 0
   - name: MiddleGround
     uniqueID: 1530486983
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
   - name: Ground
     uniqueID: 688085981
