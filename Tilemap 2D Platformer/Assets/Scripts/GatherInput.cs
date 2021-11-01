@@ -29,6 +29,12 @@ public class GatherInput : MonoBehaviour
 
     private void OnDisable()
     {
+        DisablePlayerControls();
+
+        //Can also disable everything with myControls.Disable();
+    }
+
+    public void DisablePlayerControls(){
         myControls.Player.Move.performed -= StartMove;
         myControls.Player.Move.canceled -= StopMove;
 
@@ -36,8 +42,6 @@ public class GatherInput : MonoBehaviour
         myControls.Player.Jump.canceled -= StopJump;
 
         myControls.Player.Disable();
-
-        //Can also disable everything with myControls.Disable();
     }
 
     private void StartMove(InputAction.CallbackContext ctx)
